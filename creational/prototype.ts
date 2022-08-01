@@ -21,15 +21,10 @@ class Customer {
 }
 
 function run() {
-    var proto = new Customer("n/a", "n/a", "pending");
-    var prototype = new CustomerPrototype(proto);
-    var customer2 = prototype.clone("John");
-    customer2.proto.first = "John2";
-    console.log(proto);
-    console.log(prototype);
-    console.log(customer2);
-    console.log(proto);
-    console.log(prototype);
+    var protoCustomer = new Customer("n/a", "n/a", "pending");
+    var newCustomer = new CustomerPrototype(protoCustomer).clone("John");
+    console.log(newCustomer.proto);
+    console.log(newCustomer);
 }
 
 run()
