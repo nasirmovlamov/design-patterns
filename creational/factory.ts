@@ -11,13 +11,25 @@ class Admin extends User {
 }
 
 class Factory {
-    createUser(name: string): User {
-        return new User(name);
+    public object:User
+    constructor() {
+        this.object = new User("");
     }
-    createAdmin(name: string): Admin {
-        return new Admin(name);
+    
+    fullName = (): string => {
+      return this.object.name;
+    }
+    
+    createUser(name: string): Factory {
+        this.object = new User(name);
+        return this;
+    }
+    
+    createAdmin(name: string): Factory {
+        this.object = new Admin(name);
+        return this;
     }
 }
 
-const user = new Factory().createUser('John');
-const admin = new Factory().createAdmin('John');
+const user = new Factory().createUser('John').fullName();
+const admin = new Factory().createAdmin('Alovset').fullName();
