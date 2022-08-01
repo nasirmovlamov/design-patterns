@@ -28,6 +28,8 @@ function run() {
     console.log(proto);
     console.log(prototype);
     console.log(customer2);
+    console.log(proto);
+    console.log(prototype);
 }
 
 run()
