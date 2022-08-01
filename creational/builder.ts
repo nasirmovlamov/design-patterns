@@ -66,4 +66,5 @@ class HomeBuilder {
 
 const newHome = new HomeBuilder();
 newHome.buildWall().buildDoor().build();
+
 console.log(newHome);
