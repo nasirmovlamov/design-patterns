@@ -1,30 +1,48 @@
-class User {
-  constructor(private name: string) {}
+// Adapter Design Pattern Example
 
-  sayHi() {
-    console.log(`Hi, ${this.name}`);
-  }
-
-  getName() {
-    return this.name;
-  }
-
-  setName(name: string) {
-    this.name = name;
-  }
+interface IIphone {
+    useLightning(): string;
 }
 
-// Adapter Pattern
-class UserAdapter {
-  constructor(private user: User) {}
+interface IAndroid {
+    useMicroUsb(): string;
+}
 
-  getFullName() {
-    return `${this.user.getName()}`;
-  }
+class Iphone12 implements IIphone {
+    useLightning(): string {
+        return 'Lightning is enabled';
+    }
+}
+
+class GooglePixel implements IAndroid {
+    useMicroUsb(): string {
+        return 'Micro USB is enabled';
+    }
+}
+
+// Adapter Pattern - Adapts iPhone to work with Android charger
+class LightningToMicroUsbAdapter implements IAndroid {
+    private iphone: IIphone;
+
+    constructor(iphone: IIphone) {
+        this.iphone = iphone;
+    }
+
+    useMicroUsb(): string {
+        return this.iphone.useLightning();
+    }
 }
 
 // Example Usage:
-const user = new User('John Doe');
-const userAdapter = new UserAdapter(user);
+const iphone = new Iphone12();
+const android = new GooglePixel();
 
-console.log(userAdapter.getFullName()); // "John Doe"
+// iPhone uses Lightning
+console.log(iphone.useLightning());
+
+// Android uses Micro USB
+console.log(android.useMicroUsb());
+
+// Adapter allows iPhone to work with Micro USB charger
+const adapter = new LightningToMicroUsbAdapter(iphone);
+console.log(adapter.useMicroUsb()); // Uses Lightning internally but exposes Micro USB interface

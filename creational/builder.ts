@@ -19,6 +19,8 @@ class homeWindow {
     console.log('Window built');
   }
 }
+
+
 class Home {
   public wall?: Wall;
   public roof?: Roof;
@@ -66,5 +68,3 @@ class HomeBuilder {
 
 const newHome = new HomeBuilder();
 newHome.buildWall().buildDoor().build();
-
-console.log(newHome);
