@@ -33,6 +33,7 @@ class LightningToMicroUsbAdapter implements IAndroid {
     }
 }
 
+<<<<<<< HEAD
 // Example Usage:
 const iphone = new Iphone12();
 const android = new GooglePixel();
