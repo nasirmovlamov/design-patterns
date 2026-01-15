@@ -33,5 +33,13 @@ console.log(process)
 console.log(process2)
 
 
+// Example applications of the Singleton pattern:
+// - Logging: ensuring a single logging instance throughout the app
+// - Configuration: sharing config values app-wide via a singleton
+// - Database connection: single database connection manager instance
+// - Caching: single in-memory cache shared throughout the app
+// - Resource management: controlling access to shared resources
+
+
 
 

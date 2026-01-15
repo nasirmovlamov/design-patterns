@@ -28,3 +28,10 @@ function run() {
 }
 
 run()
+
+// Example applications of the Prototype pattern:
+// - Backend: Cloning database entity objects to avoid fetching and reloading from database repeatedly
+// - Backend: Creating template request or response objects (e.g., for microservices that modify a "request" prototype per user)
+// - Web: Duplicating DOM components or client-side data objects without re-instantiating entire classes
+// - Web: Copying client-side settings, state, or form templates to quickly create similar UI blocks
+

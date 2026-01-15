@@ -33,3 +33,8 @@ class Factory {
 
 const user = new Factory().createUser('John').fullName();
 const admin = new Factory().createAdmin('Alovset').fullName();
+
+// Example applications of the Factory pattern:
+// - Object creation: creating different types of objects (e.g., users, admins, products) 
+// - Object pooling: reusing objects instead of creating new ones (e.g., database connections, file handles)
+// - Dependency injection: injecting objects into classes instead of creating them directly (e.g., services, repositories)

@@ -1,84 +1,130 @@
-// Step 1: Define the Implementor Interface
-interface Device {
-  powerOn(): void;
-  powerOff(): void;
-  setVolume(volume: number): void;
-  mute(): void;
+// Bridge Design Pattern Example
+
+// Abstraction
+class RemoteControl {
+    // 🔗 BRIDGE: This property holds the reference to the implementor (the bridge connection)
+    protected device: DeviceImplementor;
+
+    // 🔗 BRIDGE: Constructor establishes the bridge by accepting an implementor
+    constructor(device: DeviceImplementor) {
+        this.device = device; // Bridge is created here
+    }
+
+    togglePower(): void {
+        // 🔗 BRIDGE: Using the bridge to call implementor methods
+        if (this.device.isEnabled()) {
+            this.device.disable();
+        } else {
+            this.device.enable();
+        }
+    }
+
+    volumeUp(): void {
+        // 🔗 BRIDGE: Delegating to implementor through the bridge
+        this.device.setVolume(this.device.getVolume() + 10);
+    }
+
+    volumeDown(): void {
+        // 🔗 BRIDGE: Delegating to implementor through the bridge
+        this.device.setVolume(this.device.getVolume() - 10);
+    }
 }
 
-// Step 2: Concrete Implementations of the Device
-class TV implements Device {
-  public powerOn(): void {
-    console.log('TV is now ON.');
-  }
-  public powerOff(): void {
-    console.log('TV is now OFF.');
-  }
-  public setVolume(volume: number): void {
-    console.log(`TV volume set to ${volume}.`);
-  }
-  public mute(): void {
-    console.log('TV is muted.');
-  }
+// Refined Abstraction
+class AdvancedRemoteControl extends RemoteControl {
+    mute(): void {
+        // 🔗 BRIDGE: Using the inherited bridge to access implementor
+        this.device.setVolume(0);
+    }
 }
 
-class Radio implements Device {
-  public powerOn(): void {
-    console.log('Radio is now ON.');
-  }
-  public powerOff(): void {
-    console.log('Radio is now OFF.');
-  }
-  public setVolume(volume: number): void {
-    console.log(`Radio volume set to ${volume}.`);
-  }
-  public mute(): void {
-    console.log('Radio is muted.');
-  }
+// 🔗 BRIDGE INTERFACE: This interface IS the bridge - it defines the contract
+// that connects the abstraction (RemoteControl) to implementations (TV, Radio)
+interface DeviceImplementor {
+    enable(): void;
+    disable(): void;
+    isEnabled(): boolean;
+    setVolume(volume: number): void;
+    getVolume(): number;
 }
 
-// Step 3: Define the Abstraction (RemoteControl)
-abstract class RemoteControl {
-  protected device: Device;  // This is the bridge between abstraction and implementation
+// Concrete Implementors
+class TV implements DeviceImplementor {
+    private on: boolean = false;
+    private volume: number = 20;
 
-  constructor(device: Device) {
-    this.device = device;
-  }
+    enable(): void {
+        this.on = true;
+        console.log("TV is turned ON");
+    }
 
-  abstract turnOn(): void;
-  abstract turnOff(): void;
-  abstract adjustVolume(volume: number): void;
-  abstract toggleMute(): void;
+    disable(): void {
+        this.on = false;
+        console.log("TV is turned OFF");
+    }
+
+    isEnabled(): boolean {
+        return this.on;
+    }
+    setVolume(volume: number): void {
+        this.volume = Math.max(0, Math.min(100, volume));
+        console.log(`TV volume set to ${this.volume}`);
+    }
+    getVolume(): number {
+        return this.volume;
+    }
 }
 
-// Step 4: Refined Abstraction (AdvancedRemoteControl)
-class BasicRemoteControl extends RemoteControl {
-  public turnOn(): void {
-    this.device.powerOn();
-  }
-  public turnOff(): void {
-    this.device.powerOff();
-  }
-  public adjustVolume(volume: number): void {
-    this.device.setVolume(volume);
-  }
-  public toggleMute(): void {
-    this.device.mute();
-  }
+class Radio implements DeviceImplementor {
+    private on: boolean = false;
+    private volume: number = 15;
+
+    enable(): void {
+        this.on = true;
+        console.log("Radio is ON");
+    }
+
+    disable(): void {
+        this.on = false;
+        console.log("Radio is OFF");
+    }
+
+    isEnabled(): boolean {
+        return this.on;
+    }
+    setVolume(volume: number): void {
+        this.volume = Math.max(0, Math.min(100, volume));
+        console.log(`Radio volume: ${this.volume}`);
+    }
+    getVolume(): number {
+        return this.volume;
+    }
 }
 
-// Step 5: Client Code (Using the Bridge Pattern)
-const tv = new TV();
-const radio = new Radio();
+// Usage
+function runBridgeDemo() {
+    const tv = new TV();
+    // 🔗 BRIDGE: Creating the bridge connection - passing implementor to abstraction
+    const remote = new RemoteControl(tv);
 
-// Basic Remote Control for TV
-const tvRemote = new BasicRemoteControl(tv);
-tvRemote.turnOn();
-tvRemote.adjustVolume(20);
-tvRemote.toggleMute();
+    remote.togglePower(); // TV is turned ON
+    remote.volumeUp();    // TV volume set to 30
+    remote.volumeDown();  // TV volume set to 20
 
-// Basic Remote Control for Radio
-const radioRemote = new BasicRemoteControl(radio);
-radioRemote.turnOn();
-radioRemote.adjustVolume(15);
-radioRemote.toggleMute();
+    const radio = new Radio();
+    // 🔗 BRIDGE: Another bridge connection with different implementor
+    const advancedRemote = new AdvancedRemoteControl(radio);
+
+    advancedRemote.togglePower(); // Radio is ON
+    advancedRemote.volumeUp();    // Radio volume: 25
+    advancedRemote.mute();        // Radio volume: 0
+}
+
+runBridgeDemo();
+
+/*
+Example applications of the Bridge pattern:
+- UI frameworks: separating abstractions like GUI windows from platform-dependent rendering APIs.
+- Remotes for smart devices: allowing various kinds of remotes to control various kinds of devices.
+- Persistence layer: decoupling repository interfaces from their underlying storage implementations (SQL, Mongo, file, etc).
+*/
